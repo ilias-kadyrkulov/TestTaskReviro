@@ -1,0 +1,8 @@
+export { default as scatteredClouds } from './cloudy.svg'
+export { default as fewClouds } from './cloudy-day-1.svg'
+export { default as thunderstorm } from './thunder.svg'
+export { default as lightRain } from './rainy-3.svg'
+export { default as heavyRain } from './rainy-6.svg'
+export { default as snow } from './snowy-6.svg'
+export { default as clearDay } from './day.svg'
+export { default as clearNight } from './night.svg'
