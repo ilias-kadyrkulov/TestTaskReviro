@@ -1,13 +1,14 @@
 import { forecastAPI, geoAPI, iconAPI, weatherAPI } from '@/api'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { geoSliceReducer } from './slices'
+import { appSliceReducer, geoSliceReducer } from './slices'
 
 const rootReducer = combineReducers({
     [geoAPI.reducerPath]: geoAPI.reducer,
     // [iconAPI.reducerPath]: iconAPI.reducer,
     [weatherAPI.reducerPath]: weatherAPI.reducer,
     [forecastAPI.reducerPath]: forecastAPI.reducer,
-    geoReducer: geoSliceReducer
+    geoReducer: geoSliceReducer,
+    appReducer: appSliceReducer
 })
 
 export const store = configureStore({

@@ -11,6 +11,11 @@ export type TWind = {
 
 export type TWeather = TWeatherItem[]
 
+export type TSys = {
+    sunrise: number
+    sunset: number
+}
+
 type TWeatherItem = {
     id: number
     main: TCondition

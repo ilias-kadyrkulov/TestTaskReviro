@@ -1,15 +1,17 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 type State = {
-    city: string
+    name: string
     lat: number | null
     lon: number | null
+    error?: string | null
 }
 
 const initialState: State = {
-    city: 'Bishkek',
+    name: 'Bishkek',
     lat: 42.8765615,
-    lon: 74.6070079
+    lon: 74.6070079,
+    error: null
 }
 
 export const geoSlice = createSlice({
@@ -17,7 +19,12 @@ export const geoSlice = createSlice({
     initialState,
     reducers: {
         setGetCords: (state, action: PayloadAction<State>) => {
-            state = action.payload
+            state.name = action.payload.name
+            state.lat = action.payload.lat
+            state.lon = action.payload.lon
+        },
+        setError: (state, action: PayloadAction<string>) => {
+            state.error = action.payload
         }
     }
 })

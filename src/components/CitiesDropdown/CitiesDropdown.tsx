@@ -2,56 +2,113 @@ import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { useLazyGetGeoCordsQuery } from '@/api/geo/geo.api'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useActions } from '@/hooks/useActions'
+import { TGeoItem } from '@/api/geo/geo.types'
 import geo from '@/assets/icons/geo.svg'
+import clsx from 'clsx'
 
 type TProps = {}
 
 export const CitiesDropdown: FC<TProps> = () => {
+    const [isDrowdownClicked, setIsDropdownClicked] = useState(false)
     const [value, setValue] = useState('Bishkek')
+    const [error, setError] = useState<any>('')
     const debouncedValue = useDebounce(value, 700)
 
-    const [getGeoCords, { data }] = useLazyGetGeoCordsQuery()
+    const [getGeoCords, { data, isFetching, isError }] =
+        useLazyGetGeoCordsQuery()
 
     const { setGetCords } = useActions()
 
     const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+        e.stopPropagation()
         setValue(e.target.value)
     }
 
+    const handleOnCityClicked = (city: TGeoItem) => () => {
+        setGetCords({ ...city })
+        setIsDropdownClicked(false)
+    }
+
+    const handleDropdown = () => {
+        setIsDropdownClicked(!isDrowdownClicked)
+    }
+
     useEffect(() => {
-        debouncedValue &&
-            getGeoCords({ city: debouncedValue && debouncedValue, limit: 5 })
+        try {
+            debouncedValue &&
+                getGeoCords({
+                    city: debouncedValue && debouncedValue,
+                    limit: 5
+                })
+        } catch (error) {
+            console.error(error)
+            setError(error)
+        }
     }, [debouncedValue])
 
-    // useEffect(() => {
-    //     data && setGetCords({ city: data.city, lat: data.lat, lon: data.lon })
-    // }, [data])
+    useEffect(() => {
+        const handleOutsideClick = (event: MouseEvent) => {
+            const input = document.getElementById('input')
+            //@ts-ignore
+            if (input && !input.contains(event.target)) {
+                setIsDropdownClicked(false)
+                console.log('dropdown false')
+            }
+        }
+
+        document.addEventListener('mousedown', handleOutsideClick)
+
+        return () =>
+            document.removeEventListener('mousedown', handleOutsideClick)
+    }, [])
 
     return (
-        <div className='relative'>
+        <div className='relative mb-10' id='input'>
             <div className='flex'>
                 <img
                     src={geo}
                     alt='Geo icon'
                 />
-                <input
-                    className='w-24 bg-transparent px-2 text-white tracking-wide'
-                    type='text'
-                    value={value}
-                    onChange={handleOnChange}
-                />
-                <div className='relative before:absolute before:left-2 before:top-2/4 before:w-3 before:h-0.5 before:rounded-xl before:bg-white before:rotate-45 after:absolute after:left-4 after:top-2/4 after:w-3 after:h-0.5 after:bg-white after:-rotate-45' />
+                <div
+                    
+                    className='flex items-center relative'
+                >
+                    <input
+                        className='w-[112px] bg-transparent px-2 text-white font-medium text-2xl leading-7 tracking-wide'
+                        type='text'
+                        value={value}
+                        onChange={handleOnChange}
+                        onClick={() => setIsDropdownClicked(true)}
+                    />
+                    <button
+                        onClick={handleDropdown}
+                        className={clsx(
+                            'relative w-5 h-5 before:absolute after:absolute before:transition-transform before:duration-500 after:transition-transform after:duration-500 before:left-2 before:w-3 before:h-0.5 before:rounded-xl before:bg-white after:left-4 after:w-3 after:h-0.5 after:bg-white lg:w-5 lg:h-6 lg:before:left-1 lg:before:top-1.5 lg:after:left-1 lg:after:top-3.5',
+                            {
+                                'before:rotate-45 after:-rotate-45':
+                                    isDrowdownClicked,
+                                'before:-rotate-45 after:rotate-45':
+                                    !isDrowdownClicked
+                            }
+                        )}
+                    />
+                </div>
             </div>
-            {data && (
-                <div className='absolute w-full top-8 left-7 bg-white rounded'>
-                    <ul className='divide-y-2 p-2'>
+            {isFetching && <div>Loading...</div>}
+            {isError && <div>{error}</div>}
+            {isDrowdownClicked && (
+                <div className='absolute w-full top-8 left-7 bg-white rounded lg:top-0 lg:left-40'>
+                    <ul className='divide-y-2 p-1'>
                         {data?.map((city, idx) => (
-                            <li
+                            <button
+                                onClick={handleOnCityClicked(city)}
+                                className='w-full px-1 py-1'
                                 key={idx}
-                                className='px-3 py-1 transition-colors duration-500 rounded hover:bg-[#D69E36] hover:text-white'
                             >
-                                {city.name}
-                            </li>
+                                <li className='transition-colors duration-500 rounded hover:bg-[#D69E36] hover:text-white'>
+                                    {city.name}
+                                </li>
+                            </button>
                         ))}
                     </ul>
                 </div>

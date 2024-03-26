@@ -8,14 +8,17 @@ export const forecastAPI = createApi({
     }),
     endpoints: builder => ({
         getForecast: builder.query<TResponse, TRequest>({
-            query: ({ q }) => ({
+            query: ({ q, cnt }) => ({
                 url: '',
                 params: {
                     q: q,
                     units: 'metric',
+                    cnt: cnt,
                     appid: process.env.API_KEY
                 }
             })
         })
     })
 })
+
+export const { useLazyGetForecastQuery } = forecastAPI

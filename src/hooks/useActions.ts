@@ -1,9 +1,10 @@
 import { useTypedDispatch } from '@/hooks/useTypedDispatch'
 import { bindActionCreators } from '@reduxjs/toolkit'
-import { geoSliceActions } from '@/store/slices/index'
+import { geoSliceActions, appSliceActions } from '@/store/slices/index'
 
 const actions = {
-    ...geoSliceActions
+    ...geoSliceActions,
+    ...appSliceActions
 }
 
 export const useActions = () => {

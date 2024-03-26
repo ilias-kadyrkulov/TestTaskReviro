@@ -5,7 +5,7 @@ export type TRequest = {
     limit: number
 }
 
-type TGeoItem = {
+export type TGeoItem = {
     name: string
     lat: number
     lon: number
