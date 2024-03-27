@@ -70,7 +70,6 @@ export const CitiesDropdown: FC<TProps> = () => {
                     alt='Geo icon'
                 />
                 <div
-                    
                     className='flex items-center relative'
                 >
                     <input

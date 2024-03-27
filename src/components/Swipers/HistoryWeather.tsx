@@ -12,12 +12,13 @@ export const HistorySwiper = () => {
             slidesPerView={5}
             autoplay={{ delay: 5000 }}
             navigation
+            // breakpoints={{
+            //     1024: {
+            //         slidesPerView: 3
+            //     }
+            // }}
         >
             <SwiperSlide>Slide 1</SwiperSlide>
-            <SwiperSlide>Slide 2</SwiperSlide>
-            <SwiperSlide>Slide 3</SwiperSlide>
-            <SwiperSlide>Slide 4</SwiperSlide>
-            <SwiperSlide>Slide 5</SwiperSlide>
         </Swiper>
     )
 }

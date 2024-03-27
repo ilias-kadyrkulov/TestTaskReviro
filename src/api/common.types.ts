@@ -27,7 +27,7 @@ export type TClouds = {
     all: number
 }
 
-type TCondition =
+export type TCondition =
     | 'Thunderstorm'
     | 'Drizzle'
     | 'Rain'

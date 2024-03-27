@@ -1,6 +1,5 @@
 import { FC, useEffect } from 'react'
 import { Line } from 'react-chartjs-2'
-import clocks from '@/assets/icons/clocks.svg'
 import { useLazyGetForecastQuery } from '@/api/forecast/forecast.api'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
 import { useActions } from '@/hooks/useActions'
@@ -15,8 +14,12 @@ import {
     LinearScale,
     PointElement,
     Title,
-    Tooltip
+    Tooltip,
+    LineController
 } from 'chart.js'
+import annotationPlugin from 'chartjs-plugin-annotation'
+import 'chartjs-plugin-datalabels'
+import clocks from '@/assets/icons/clocks.svg'
 
 Chart.register(
     CategoryScale,
@@ -25,7 +28,9 @@ Chart.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    annotationPlugin,
+    LineController
 )
 
 interface IChartProps {
@@ -50,49 +55,103 @@ export const ForecastChart: FC = () => {
         return formattedTime
     })
 
-    const data: IChartProps = {
-        data: {
-            labels: dateTimeString,
-            datasets: [
-                {
-                    data: [2],
-                    tension: 0.4
-                }
-            ]
-        }
+    const temps = forecastData?.list.map(day => {
+        const temp = Math.floor(day.main.temp)
+        return temp
+    })
+
+    const data: ChartData<'line'> = {
+        labels: dateTimeString,
+        datasets: [
+            {
+                backgroundColor: '#FFC355',
+                borderColor: '#FFC355',
+                data: temps!,
+                // datalabels: {
+                //     align: 'end',
+                //     anchor: 'end'
+                // },
+                tension: 0.4,
+            }
+        ]
     }
 
-    const options = {
-        responsive: true,
+    const options: ChartOptions<'line'> = {
         scales: {
             x: {
-                grid: {
-                    drawBorder: false,
+                border: {
                     display: false
                 },
-                ticks: {
-                    // Здесь можно настроить отображение меток по оси X
-                }
+                grid: {
+                    display: false
+                },
+                // display: false
+                // ticks: {
+                //     callback: function (value, index, ticks) {
+                //         console.log(ticks, 'x ticks')
+                //         console.log(value, 'x ticks value')
+
+                //         return index === 0 ? value : '' // Показать метку 'Now' и скрыть остальные
+                //     }
+                //     // stepSize: 6
+                // }
             },
             y: {
-                grid: {
-                    drawBorder: false,
-                    display: false
-                },
-                ticks: {
-                    // Здесь можно настроить отображение меток по оси Y
-                }
+                display: false
             }
         },
         plugins: {
-            legend: {
-                display: false // Это скроет легенду
-            },
             tooltip: {
-                enabled: false // Это отключит всплывающие подсказки
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function (context) {
+                        let label = context.dataset.label || ''
+
+                        console.log(label, 'label')
+
+                        if (label) {
+                            label += ': '
+                        }
+                        if (context.parsed.y !== null) {
+                            label += context.parsed.y + '°C'
+                        }
+                        return label
+                    },
+                    title: function (tooltips) {
+                        console.log(tooltips, 'tooltips title')
+                    }
+                },
+                external: function (context) {
+                    console.log(context.tooltip.caretX, 'caretX external')
+                },
+            },
+            legend: {
+                display: false
+            },
+            datalabels: {
+                align: 'start',
+                anchor: 'start',
+                formatter: (value, context) => {
+                    console.log(context, 'datalabels context');
+                    Math.round(value)
+                    return value.y + '°C' // Или любой другой формат, который вам нужен
+                }
+            },
+            annotation: {
+                annotations: [
+                    {
+                        type: 'line',
+                        yMax: 2,
+                        yMin: 1,
+                        borderColor: '#FFC355',
+                        borderWidth: 1,
+                        borderDash: [6, 6] // Делает линию пунктирной
+                    }
+                ]
             }
         }
-        // Дополнительные настройки могут быть добавлены здесь
     }
 
     useEffect(() => {
@@ -108,7 +167,7 @@ export const ForecastChart: FC = () => {
     }, [name, lat, lon])
 
     return (
-        <div className='p-2 rounded-sm bg-[#DFAE53CC]'>
+        <div className='pt-2 pl-8 h-full bg-[#DFAE53CC] rounded-[40px]'>
             <div className='flex item'>
                 <img
                     src={clocks}
@@ -120,7 +179,10 @@ export const ForecastChart: FC = () => {
             </div>
             {isFetching && <div>Loading...</div>}
 
-            <Line {...data} options={options} />
+            <Line
+                data={data}
+                options={options}
+            />
         </div>
     )
 }
