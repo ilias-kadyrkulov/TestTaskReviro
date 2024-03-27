@@ -63,7 +63,7 @@ export const CitiesDropdown: FC<TProps> = () => {
     }, [])
 
     return (
-        <div className='relative mb-10' id='input'>
+        <div className='relative lg:mb-10' id='input'>
             <div className='flex'>
                 <img
                     src={geo}

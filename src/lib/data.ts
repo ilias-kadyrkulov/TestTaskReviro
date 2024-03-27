@@ -2,11 +2,7 @@ import {
     explore,
     geo,
     settings,
-    weather,
-    rainChance,
-    sun,
-    temp,
-    wind
+    weather
 } from '@/assets/icons'
 import {
     activityFour,
@@ -27,11 +23,4 @@ export const activities = [
     { distance: '1.5km', imageSrc: activityTwo },
     { distance: '3km', imageSrc: activityThree },
     { distance: '500m', imageSrc: activityFour }
-]
-
-export const conditions = [
-    { title: 'Real Feel', imageSrc: temp },
-    { title: 'Wind', imageSrc: wind },
-    { title: 'Chance of rain', imageSrc: rainChance },
-    { title: 'UV Index', imageSrc: sun }
 ]

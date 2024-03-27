@@ -15,6 +15,9 @@ function App() {
                 height: window.innerHeight
             })
         }
+        console.log(window.screenX);
+        console.log(window.screenY);
+        
 
         handleResize()
 

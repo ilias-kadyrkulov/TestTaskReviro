@@ -1,4 +1,4 @@
-import { TMain, TWeather } from '../common.types'
+import { TMain, TRain, TWeather, TWind } from '../common.types'
 
 export type TResponse = {
     list: TListItem[]
@@ -9,9 +9,11 @@ export type TRequest = {
     cnt?: number
 }
 
-type TListItem = {
+export type TListItem = {
     dt: number
     main: TMain
     weather: TWeather
+    wind: TWind
+    rain?: TRain
     dt_txt: string
 }

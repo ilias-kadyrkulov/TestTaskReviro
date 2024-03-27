@@ -9,6 +9,10 @@ export type TWind = {
     speed: number
 }
 
+export type TRain = {
+    ['3h']: number
+}
+
 export type TWeather = TWeatherItem[]
 
 export type TSys = {

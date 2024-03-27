@@ -1,17 +1,25 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { TListItem, TResponse } from '@/api/forecast/forecast.types'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-type State = {
-    
+type TState = {
+    fiveDays: {
+        list: [] | TListItem[]
+    }
 }
 
-const initialState: State = {
+const initialState: TState = {
+    fiveDays: {
+        list: []
+    }
 }
 
 export const forecastSlice = createSlice({
     name: 'forecastSlice',
     initialState,
     reducers: {
-        
+        setFiveDaysForecast: (state, action: PayloadAction<TResponse>) => {
+            state.fiveDays.list = action.payload.list
+        }
     }
 })
 

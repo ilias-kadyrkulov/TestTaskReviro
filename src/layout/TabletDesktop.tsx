@@ -1,6 +1,6 @@
 import { ForecastChart, HistorySwiper, WeatherNow } from '@/components'
-import { activities, conditions, sidebar } from '@/lib/data'
-import { clocks, heart } from '@/assets/icons'
+import { activities, sidebar } from '@/lib/data'
+import { heart } from '@/assets/icons'
 import { user } from '@/assets/imgs'
 
 export const TabletDesktop = () => {
@@ -10,7 +10,7 @@ export const TabletDesktop = () => {
             <div className='grid'>
                 <div className='sidebar py-5'>
                     <img
-                        className='w-[60px] h-[60px] mb-24'
+                        className='w-[60px] h-[60px] mb-24 cursor-pointer'
                         src={user}
                         alt={`User's avatar`}
                     />
@@ -19,7 +19,7 @@ export const TabletDesktop = () => {
                             {sidebar.map(setting => (
                                 <li
                                     key={setting.title}
-                                    className='flex flex-col items-center'
+                                    className='flex flex-col items-center cursor-pointer'
                                 >
                                     <img
                                         className='w-[50px] h-[50px] mb-1'
@@ -63,37 +63,6 @@ export const TabletDesktop = () => {
                 </div>
                 <div className='conditions'>
                     <HistorySwiper />
-                    <div className='flex justify-center gap-2'>
-                        <img
-                            src={clocks}
-                            alt='Real-time'
-                        />
-                        <span className='text-white font-medium text-lg leading-5'>
-                            8:00PM GMT
-                        </span>
-                    </div>
-                    <div className='my-[34px] px-4'>
-                        <h3 className='text-white text-sm font-bold leading-4'>
-                            AIR CONDITIONS
-                        </h3>
-                        <ul className='flex flex-col gap-11 mt-5'>
-                            {conditions.map(condition => (
-                                <li key={condition.title}>
-                                    <img
-                                        className='inline'
-                                        src={condition.imageSrc}
-                                        alt={condition.title}
-                                    />
-                                    <span className='text-white font-medium text-xs leading-[14px] pl-1'>
-                                        {condition.title}
-                                    </span>
-                                    <p className='text-white font-medium text-base leading-5 pl-6'>
-                                        TODO
-                                    </p>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>

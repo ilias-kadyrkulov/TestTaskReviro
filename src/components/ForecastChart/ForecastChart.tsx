@@ -66,7 +66,7 @@ export const ForecastChart: FC = () => {
                 //     align: 'end',
                 //     anchor: 'end'
                 // },
-                tension: 0.4,
+                tension: 0.4
             }
         ]
     }
@@ -79,7 +79,7 @@ export const ForecastChart: FC = () => {
                 },
                 grid: {
                     display: false
-                },
+                }
                 // display: false
                 // ticks: {
                 //     callback: function (value, index, ticks) {
@@ -120,7 +120,7 @@ export const ForecastChart: FC = () => {
                 },
                 external: function (context) {
                     console.log(context.tooltip.caretX, 'caretX external')
-                },
+                }
             },
             legend: {
                 display: false
@@ -129,7 +129,7 @@ export const ForecastChart: FC = () => {
                 align: 'start',
                 anchor: 'start',
                 formatter: (value, context) => {
-                    console.log(context, 'datalabels context');
+                    console.log(context, 'datalabels context')
                     Math.round(value)
                     return value.y + '°C' // Или любой другой формат, который вам нужен
                 }
@@ -158,7 +158,6 @@ export const ForecastChart: FC = () => {
             console.error(error)
             setError(error)
         }
-        console.log('forecast')
     }, [name, lat, lon])
 
     return (
