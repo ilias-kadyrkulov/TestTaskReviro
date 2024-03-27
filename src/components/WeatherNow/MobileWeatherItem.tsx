@@ -14,17 +14,17 @@ import { TResponse } from '@/api/weather/weather.types'
 
 type TProps = {
     data: TResponse
-    cloudiness: number
-    isNeutral: boolean
+    cloudiness: number | null
+    isNeutral: boolean | null
     months: string[]
-    dayOfTheWeek: string | undefined | 0
+    dayOfTheWeek: string
 }
 
-export const WeatherItem: FC<TProps> = ({
+export const MobileWeatherItem: FC<TProps> = ({
     data,
-    cloudiness,
-    isNeutral,
     months,
+    isNeutral,
+    cloudiness,
     dayOfTheWeek
 }) => {
     const now = new Date()
@@ -63,7 +63,7 @@ export const WeatherItem: FC<TProps> = ({
             {data.weather[0].main === 'Drizzle' && (
                 <>
                     <h2 className='text-5xl font-medium text-white'>
-                        {data.weather[0].main}
+                        Drizzle
                     </h2>
                     <img
                         className='h-[200px]'
@@ -132,13 +132,17 @@ export const WeatherItem: FC<TProps> = ({
                     />
                 </>
             )}
-            <h1 className='text-5xl font-medium text-white mb-2'>
-                {Math.floor(data.main.temp)}°C
-            </h1>
-            <p className='font-normal text-white'>
-                {dayOfTheWeek} | {currentDay} {months[currentMonth]}{' '}
-                {currentYear}
-            </p>
+            {dayOfTheWeek && (
+                <>
+                    <h1 className='text-5xl font-medium text-white mb-2'>
+                        {Math.floor(data.main.temp)}°C
+                    </h1>
+                    <p className='font-normal text-white'>
+                        {dayOfTheWeek} | {currentDay}{' '}
+                        {months[currentMonth]} {currentYear}
+                    </p>
+                </>
+            )}
         </div>
     )
 }

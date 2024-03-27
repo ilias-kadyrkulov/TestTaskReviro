@@ -73,7 +73,7 @@ export const CitiesDropdown: FC<TProps> = () => {
                     className='flex items-center relative'
                 >
                     <input
-                        className='w-[112px] bg-transparent px-2 text-white font-medium text-2xl leading-7 tracking-wide'
+                        className='w-[150px] bg-transparent px-2 text-white font-medium text-2xl leading-7 tracking-wide'
                         type='text'
                         value={value}
                         onChange={handleOnChange}
@@ -96,7 +96,7 @@ export const CitiesDropdown: FC<TProps> = () => {
             {isFetching && <div>Loading...</div>}
             {isError && <div>{error}</div>}
             {isDrowdownClicked && (
-                <div className='absolute w-full top-8 left-7 bg-white rounded lg:top-0 lg:left-40'>
+                <div className='absolute w-full top-8 left-7 bg-white rounded lg:top-0 lg:left-60 z-50'>
                     <ul className='divide-y-2 p-1'>
                         {data?.map((city, idx) => (
                             <button

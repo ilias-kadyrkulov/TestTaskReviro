@@ -15,8 +15,8 @@ import {
 
 type TProps = {
     data: TResponse
-    cloudiness: number
-    isNeutral: boolean
+    cloudiness: number | null
+    isNeutral: boolean | null
     months: string[]
     dayOfTheWeek: string | undefined | 0
 }
@@ -78,7 +78,7 @@ export const DesktopWeatherItem: FC<TProps> = ({
                         {Math.floor(data.main.temp)}°C
                     </h1>
                     <p className='font-normal text-white text-lg leading-5'>
-                        {dayOfTheWeek} | {currentDay} {months[currentMonth]}{' '}
+                        {dayOfTheWeek && dayOfTheWeek} | {currentDay} {months[currentMonth]}{' '}
                         {currentYear}
                     </p>
                 </div>

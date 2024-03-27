@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
 import { useLazyGetWeatherQuery } from '@/api/weather/weather.api'
 import moment from 'moment'
-import { WeatherItem } from './MobileWeatherItem'
+import { MobileWeatherItem } from './MobileWeatherItem'
 import { DesktopWeatherItem } from './DesktopWeatherItem'
 
 type TProps = {}
@@ -38,8 +38,6 @@ export const WeatherNow: FC<TProps> = () => {
     const localTime =
         timestamp && moment.unix(timestamp).utc().add(timezoneOffset, 'seconds')
 
-    //NOTE -
-
     const dayOfTheWeek = localTime && localTime.format('dddd') // Формат 24-часового времени
 
     const isNeutral =
@@ -69,13 +67,13 @@ export const WeatherNow: FC<TProps> = () => {
     return (
         <>
             {weatherData &&
-                cloudiness &&
+                dayOfTheWeek &&
                 windowSize.width &&
                 windowSize.width < 1024 && ( //ANCHOR - <1024px
                     <>
                         {isFetching && <div>Loading...</div>}
                         {isError && <div>{error}</div>}
-                        <WeatherItem
+                        <MobileWeatherItem
                             data={weatherData}
                             cloudiness={cloudiness}
                             isNeutral={isNeutral}
@@ -85,7 +83,6 @@ export const WeatherNow: FC<TProps> = () => {
                     </>
                 )}
             {weatherData &&
-                cloudiness &&
                 windowSize.width &&
                 windowSize.width >= 1024 && ( //ANCHOR - >=1024px
                     <>
