@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 type State = {
     
@@ -11,9 +11,7 @@ export const forecastSlice = createSlice({
     name: 'forecastSlice',
     initialState,
     reducers: {
-        setForecast: (state, action: PayloadAction<State>) => {
-            
-        },
+        
     }
 })
 

@@ -33,11 +33,6 @@ Chart.register(
     LineController
 )
 
-interface IChartProps {
-    data: ChartData<'line'>
-    options?: ChartOptions<'line'>
-}
-
 export const ForecastChart: FC = () => {
     const { name, lat, lon } = useTypedSelector(state => state.geoReducer)
 
