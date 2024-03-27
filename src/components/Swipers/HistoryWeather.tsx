@@ -66,6 +66,11 @@ export const HistorySwiper = () => {
         'YYYY-MM-DD HH:mm:ss'
     ).format('HH:mm')
 
+    const formattedDay = moment(
+        dayCondition?.dt_txt,
+        'YYYY-MM-DD HH:mm:ss'
+    ).format('ddd')
+
     useEffect(() => {
         try {
             if (lat && lon) {
@@ -123,7 +128,7 @@ export const HistorySwiper = () => {
                                         className='flex flex-col items-center'
                                     >
                                         <h5 className='font-normal leading-5 text-white text-lg'>
-                                            SUN
+                                            {formattedDay}
                                         </h5>
                                         <img
                                             src={`${
@@ -249,7 +254,7 @@ export const HistorySwiper = () => {
                                         className='flex flex-col items-center'
                                     >
                                         <h5 className='font-normal leading-5 text-white text-lg'>
-                                            SUN
+                                            {formattedDay}
                                         </h5>
                                         <img
                                             src={`${
