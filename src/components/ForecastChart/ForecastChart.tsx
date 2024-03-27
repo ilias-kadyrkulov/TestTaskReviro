@@ -38,7 +38,7 @@ export const ForecastChart: FC = () => {
 
     const { setError } = useActions()
 
-    const [getForecast, { data: forecastData, isFetching }] =
+    const [getForecast, { data: forecastData, isFetching, isError, error }] =
         useLazyGetForecastQuery()
 
     const dateTimeString = forecastData?.list.map(interval => {
@@ -150,15 +150,15 @@ export const ForecastChart: FC = () => {
     }
 
     useEffect(() => {
-        try {
-            if (lat && lon) {
-                getForecast({ q: name, cnt: 9 })
-            }
-        } catch (error: any) {
-            console.error(error)
-            setError(error)
+        if (lat && lon) {
+            getForecast({ q: name, cnt: 9 })
         }
     }, [name, lat, lon])
+
+    useEffect(() => {
+        //@ts-ignore
+        isError && setError(error?.data.message)
+    }, [isError])
 
     return (
         <div className='pt-2 pl-8 h-full bg-[#DFAE53CC] rounded-[40px]'>

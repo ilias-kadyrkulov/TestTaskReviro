@@ -4,6 +4,7 @@ import { useLazyGetWeatherQuery } from '@/api/weather/weather.api'
 import moment from 'moment'
 import { MobileWeatherItem } from './MobileWeatherItem'
 import { DesktopWeatherItem } from './DesktopWeatherItem'
+import { useActions } from '@/hooks/useActions'
 
 type TProps = {}
 
@@ -26,10 +27,11 @@ export const WeatherNow: FC<TProps> = () => {
     const { windowSize } = useTypedSelector(state => state.appReducer)
     const { lat, lon } = useTypedSelector(state => state.geoReducer)
     const [cloudiness, setCloudiness] = useState<number | null>(null)
-    const [error, setError] = useState<any>('')
 
-    const [getWeather, { data: weatherData, isFetching, isError }] =
+    const [getWeather, { data: weatherData, isFetching, isError, error }] =
         useLazyGetWeatherQuery()
+
+    const { setError } = useActions()
 
     const timestamp = weatherData?.dt //NOTE - Время запроса
     const timezoneOffset = weatherData?.timezone //NOTE - Смещение временной зоны в секундах
@@ -49,16 +51,15 @@ export const WeatherNow: FC<TProps> = () => {
         weatherData?.weather[0].main !== 'Thunderstorm'
 
     useEffect(() => {
-        try {
-            if (lat && lon) {
-                getWeather({ lat: lat, lon: lon })
-            }
-        } catch (error) {
-            console.error(error)
-            setError(error)
+        if (lat && lon) {
+            getWeather({ lat: lat, lon: lon })
         }
-        console.log(lat, lon)
     }, [lat, lon])
+
+    useEffect(() => {
+        //@ts-ignore
+        isError && setError(error?.data.message)
+    }, [isError])
 
     useEffect(() => {
         weatherData && setCloudiness(weatherData.clouds.all)
@@ -72,7 +73,6 @@ export const WeatherNow: FC<TProps> = () => {
                 windowSize.width < 1024 && ( //ANCHOR - <1024px
                     <>
                         {isFetching && <div>Loading...</div>}
-                        {isError && <div>{error}</div>}
                         <MobileWeatherItem
                             data={weatherData}
                             cloudiness={cloudiness}
@@ -86,7 +86,6 @@ export const WeatherNow: FC<TProps> = () => {
                 windowSize.width &&
                 windowSize.width >= 1024 && ( //ANCHOR - >=1024px
                     <>
-                        {isError && <div>{error}</div>}
                         {isFetching && <div>Loading...</div>}
                         <DesktopWeatherItem
                             data={weatherData}

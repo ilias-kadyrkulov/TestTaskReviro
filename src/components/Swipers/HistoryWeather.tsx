@@ -55,7 +55,7 @@ export const HistorySwiper = () => {
 
     const [
         getFiveDaysForecast,
-        { data: fiveDayaForecastData, isFetching, isSuccess }
+        { data: fiveDayaForecastData, isFetching, isSuccess, isError, error }
     ] = useLazyGetForecastQuery()
 
     const [dayCondition, setDayCondition] = useState<TListItem | null>(null)
@@ -72,15 +72,15 @@ export const HistorySwiper = () => {
     ).format('ddd')
 
     useEffect(() => {
-        try {
-            if (lat && lon) {
-                getFiveDaysForecast({ q: name })
-            }
-        } catch (error: any) {
-            console.error(error)
-            setError(error)
+        if (lat && lon) {
+            getFiveDaysForecast({ q: name })
         }
     }, [name, lat, lon])
+
+    useEffect(() => {
+        //@ts-ignore
+        isError && setError(error?.data.message)
+    }, [isError])
 
     useEffect(() => {
         if (fiveDayaForecastData) {

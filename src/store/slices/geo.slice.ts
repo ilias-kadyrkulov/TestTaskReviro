@@ -4,7 +4,7 @@ type State = {
     name: string
     lat: number | null
     lon: number | null
-    error?: string | null
+    error?: any | null
 }
 
 const initialState: State = {
@@ -23,7 +23,7 @@ export const geoSlice = createSlice({
             state.lat = action.payload.lat
             state.lon = action.payload.lon
         },
-        setError: (state, action: PayloadAction<string>) => {
+        setError: (state, action: PayloadAction<any>) => {
             state.error = action.payload
         }
     }

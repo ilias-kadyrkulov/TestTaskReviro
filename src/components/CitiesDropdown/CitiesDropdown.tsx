@@ -11,13 +11,12 @@ type TProps = {}
 export const CitiesDropdown: FC<TProps> = () => {
     const [isDrowdownClicked, setIsDropdownClicked] = useState(false)
     const [value, setValue] = useState('Bishkek')
-    const [error, setError] = useState<any>('')
-    const debouncedValue = useDebounce(value, 700)
+    const debouncedValue = useDebounce(value, 500)
 
-    const [getGeoCords, { data, isFetching, isError }] =
+    const [getGeoCords, { data, isFetching, isError, error }] =
         useLazyGetGeoCordsQuery()
 
-    const { setGetCords } = useActions()
+    const { setGetCords, setError } = useActions()
 
     const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.stopPropagation()
@@ -34,17 +33,17 @@ export const CitiesDropdown: FC<TProps> = () => {
     }
 
     useEffect(() => {
-        try {
-            debouncedValue &&
-                getGeoCords({
-                    city: debouncedValue && debouncedValue,
-                    limit: 5
-                })
-        } catch (error) {
-            console.error(error)
-            setError(error)
-        }
+        debouncedValue &&
+            getGeoCords({
+                city: debouncedValue && debouncedValue,
+                limit: 5
+            })
     }, [debouncedValue])
+
+    useEffect(() => {
+        //@ts-ignore
+        isError && setError(error?.data.message)
+    }, [isError])
 
     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent) => {
@@ -63,15 +62,16 @@ export const CitiesDropdown: FC<TProps> = () => {
     }, [])
 
     return (
-        <div className='relative lg:mb-10' id='input'>
+        <div
+            className='relative lg:mb-10'
+            id='input'
+        >
             <div className='flex'>
                 <img
                     src={geo}
                     alt='Geo icon'
                 />
-                <div
-                    className='flex items-center relative'
-                >
+                <div className='flex items-center relative'>
                     <input
                         className='w-[150px] bg-transparent px-2 text-white font-medium text-2xl leading-7 tracking-wide'
                         type='text'
@@ -94,7 +94,6 @@ export const CitiesDropdown: FC<TProps> = () => {
                 </div>
             </div>
             {isFetching && <div>Loading...</div>}
-            {isError && <div>{error}</div>}
             {isDrowdownClicked && (
                 <div className='absolute w-full top-8 left-7 bg-white rounded lg:top-0 lg:left-60 z-50'>
                     <ul className='divide-y-2 p-1'>
